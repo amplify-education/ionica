@@ -1,0 +1,148 @@
+%grid-column-styles
+  transition: 1s all
+  position: absolute
+  height: 100%
+
+@function map-length($map)
+  @return length(map-keys($map))
+
+@function percentage-column($size, $number_of_columns)
+  @return to-percent($size * (100 / $number_of_columns))
+
+@function to-percent($number)
+  @return $number * 1%
+
+@mixin column($grid, $key)
+  @extend %grid-column-styles
+  $c: map-get($grid, $key)
+  $padding: map-get($grid, padding)
+  @include grid-column-with-offset(map-get($c, weight), map-get($grid, total_grid_weight), map-get($c, offset), $key, map-get($grid, core_columns), map-get($grid, resolution), $padding)
+
+@mixin generate-column-classes($grid, $class_name)
+  $num_columns: map-get($grid, num_columns)
+  @for $i from 1 through $num_columns
+    .#{$class_name}-#{$i}
+      @include column($grid, $i)
+
+@function grid($list, $resolution: 767, $padding: 0)
+  $total_grid_weight: get-sum-of-column-weights($list)
+  $num_core_columns: get-num-core-columns($list)
+  $num_columns: length($list)
+  $core_columns: ()
+
+  $total_grid_weight: $total_grid_weight + (length($list) - 1) * $padding/100
+  $to_return: (total_grid_weight: $total_grid_weight, num_columns: $num_columns, resolution: $resolution, padding: $padding)
+  $index: 1
+  $offset: 0
+
+  @each $column_param in $list
+
+    $column_weight: get-column-weight($column_param)
+    $column_padding: $padding/100
+    @if $index == 1
+      $column_padding: 0
+    $to_return: map-merge($to_return, ($index: (weight: $column_weight, offset: $offset + $column_padding)))
+
+    @if is-core-column-param($column_param) or $num_core_columns == 0
+      $core_columns: map-merge($core_columns, ($index: (weight: $column_weight)))
+    $index: $index + 1
+    $offset: $offset + $column_weight + $column_padding
+
+  $to_return: map-merge($to_return, (core_columns: $core_columns))
+  @return $to_return
+
+@function get-sum-of-column-weights($list)
+  $total_weight: 0
+
+  @each $column_param in $list
+    $total_weight: $total_weight + get-column-weight($column_param)
+
+  @return $total_weight
+
+@function get-num-core-columns($list)
+  $num_core_columns: 0
+
+  @each $column_param in $list
+    @if is-core-column-param($column_param)
+      $num_core_columns: $num_core_columns + 1
+
+  @return $num_core_columns
+
+@function get-column-weight($column_param)
+  @if type-of($column_param) == list
+    @return nth($column_param,1)
+
+  @if type-of($column_param) == number
+    @return $column_param
+
+@function is-core-column-param($column_param)
+  @if type-of($column_param) == list
+    @return nth($column_param,2) == true
+  @return false
+  @if type-of($column_param) != number
+    @error "First parameter to grid has to be a list of numbers and/or lists"
+  @return false
+
+@mixin grid-column-with-offset($column_weight, $total_column_weights, $offset, $index, $core_columns, $resolution: 767, $padding: 0)
+  @include grid-column($column_weight, $total_column_weights)
+  left: percentage-column($offset, $total_column_weights)
+
+  @if is-core-column($index, $core_columns)
+    @include extend-this-column($column_weight, $index, $core_columns, $resolution, $padding)
+  @else
+    @include remove-this-column($column_weight, $total_column_weights, $offset, $resolution)
+
+@mixin grid-column($size, $number_of_columns)
+  width: percentage-column($size, $number_of_columns)
+
+@function is-core-column($key, $core_columns)
+  @return map-get($core_columns, $key) != null
+
+@mixin extend-this-column($column_weight, $column_index, $core_columns, $resolution, $padding)
+  $total_weight: total-column-weights($core_columns) + (map-length($core_columns) - 1) * $padding/100
+
+  $columns_before_this_column: get-columns-with-index-less-than($column_index, $core_columns)
+  $num_columns_before_this_column: map-length($columns_before_this_column)
+
+  $width: percentage-column($column_weight, $total_weight)
+  $left: percentage-column(total-column-weights($columns_before_this_column) + $num_columns_before_this_column * $padding/100, $total_weight)
+  @include extend($resolution,  $width, $left)
+
+@function total-column-weights($column_map)
+  $total_column_weights: 0
+  @each $index, $value in $column_map
+    $total_column_weights: $total_column_weights + map-get($value, weight)
+  @return $total_column_weights
+
+@function get-columns-with-index-less-than($limit_index, $column_map)
+  $to_return : ()
+  @each $index, $value in $column_map
+    @if $index < $limit_index
+      $to_return: map-merge($to_return, ($index: $value))
+
+  @return $to_return
+
+@mixin extend($r: 767, $width: 100%, $left: 0)
+  @include w-lte($r)
+    width: $width
+    left: $left
+
+@mixin w-lte($resolution)
+  @media only screen and (max-width: #{$resolution}px)
+    @content
+
+@mixin remove-this-column($column_weight, $total_column_weights, $offset, $resolution)
+  @if $offset < $total_column_weights / 2
+    $distance: -100% - ($offset/$column_weight) * 100%
+    @include offscreen-left($distance, $resolution)
+  @else
+    $distance: ($total_column_weights - $offset)/$column_weight * 100%
+    @include offscreen-right($distance, $resolution)
+
+@mixin offscreen-left($distance, $resolution)
+  @include w-lte($resolution)
+    transform: translate3d($distance,0,0)
+
+@mixin offscreen-right($distance, $resolution)
+  @include w-lte($resolution)
+    transform: translate3d($distance,0 ,0)
