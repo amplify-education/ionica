@@ -1,3 +1,5 @@
+$DEFAULT_RESOLUTION: 768
+
 %grid-column-styles
   transition: 1s all
   position: absolute
@@ -16,7 +18,7 @@
   @extend %grid-column-styles
   $c: map-get($grid, $key)
   $padding: map-get($grid, padding)
-  @include grid-column-with-offset(map-get($c, weight), map-get($grid, total_grid_weight), map-get($c, offset), $key, map-get($grid, core_columns), map-get($grid, resolution), $padding)
+  @include grid-column-with-offset(map-get($c, weight), map-get($grid, total_grid_weight), map-get($c, offset), $key, map-get($grid, core_columns), map-get($grid, resolution), map-get($grid, orientation), $padding)
 
 @mixin generate-column-classes($grid, $class_name)
   $num_columns: map-get($grid, num_columns)
@@ -24,14 +26,17 @@
     .#{$class_name}-#{$i}
       @include column($grid, $i)
 
-@function grid($list, $resolution: 767, $padding: 0)
+@function grid($list, $breakpoints: 767, $padding: 0)
+  $breakpoints: parse-breakpoints($breakpoints)
   $total_grid_weight: get-sum-of-column-weights($list)
   $num_core_columns: get-num-core-columns($list)
   $num_columns: length($list)
   $core_columns: ()
+  $resolution: map-get($breakpoints, resolution)
+  $orientation: map-get($breakpoints, orientation)
 
   $total_grid_weight: $total_grid_weight + (length($list) - 1) * $padding/100
-  $to_return: (total_grid_weight: $total_grid_weight, num_columns: $num_columns, resolution: $resolution, padding: $padding)
+  $to_return: (total_grid_weight: $total_grid_weight, num_columns: $num_columns, resolution: $resolution, orientation: $orientation, padding: $padding)
   $index: 1
   $offset: 0
 
@@ -50,6 +55,58 @@
 
   $to_return: map-merge($to_return, (core_columns: $core_columns))
   @return $to_return
+
+@function parse-breakpoints($breakpoints)
+  $to_return: ()
+  $breakpoints_resolution: null
+  $breakpoints_orientation: null
+
+  @if type-of($breakpoints) == map
+    $breakpoints_resolution: map-get($breakpoints, resolution)
+    $breakpoints_orientation: map-get($breakpoints, orientation)
+
+  @else
+    @if type-of($breakpoints) == number
+      $breakpoints_resolution: $breakpoints
+      $breakpoints_orientation: null
+
+    @else
+      $breakpoints: assert-type($breakpoints, string, "Expected a number or a string with value 'portrait' or 'landscape'. Got #{$breakpoints}.")
+      $breakpoints_orientation: $breakpoints
+      $breakpoints_resolution: null
+
+  @if is-not-null($breakpoints_resolution)
+    $breakpoints_resolution: assert-type($breakpoints_resolution, number, "Expected a number for resolution. Got #{type-of($breakpoints_resolution)}.")
+    @if $breakpoints_resolution < 0
+      @error "Expected resolution greater than 0. Got #{$breakpoints_resolution}."
+
+  @if is-not-null($breakpoints_orientation)
+    @if $breakpoints_orientation != "portrait" and $breakpoints_orientation != "landscape"
+      @error "Expected 'portrait' or 'landscape' as value of orientation. Got #{$breakpoints_orientation}."
+
+    @if $breakpoints_resolution == null and $breakpoints_orientation == null
+      $breakpoints_resolution: $DEFAULT_RESOLUTION
+
+  $to_return: map-merge($to_return, (resolution: $breakpoints_resolution))
+  $to_return: map-merge($to_return, (orientation: $breakpoints_orientation))
+
+  @return $to_return
+
+@function assert-not-null($value, $error_message)
+  @if is-null($value)
+    @error $error_message
+  @return $error_message
+
+@function is-null($value)
+  @return $value == null
+
+@function is-not-null($value)
+  @return not is-null($value)
+
+@function assert-type($value, $expected_type, $error_message)
+  @if type-of($value) != $expected_type
+    @error $error_message
+  @return $value
 
 @function get-sum-of-column-weights($list)
   $total_weight: 0
@@ -83,14 +140,14 @@
     @error "First parameter to grid has to be a list of numbers and/or lists"
   @return false
 
-@mixin grid-column-with-offset($column_weight, $total_column_weights, $offset, $index, $core_columns, $resolution: 767, $padding: 0)
+@mixin grid-column-with-offset($column_weight, $total_column_weights, $offset, $index, $core_columns, $resolution, $orientation, $padding: 0)
   @include grid-column($column_weight, $total_column_weights)
   left: percentage-column($offset, $total_column_weights)
 
   @if is-core-column($index, $core_columns)
-    @include extend-this-column($column_weight, $index, $core_columns, $resolution, $padding)
+    @include extend-this-column($column_weight, $index, $core_columns, $resolution, $orientation, $padding)
   @else
-    @include remove-this-column($column_weight, $total_column_weights, $offset, $resolution)
+    @include remove-this-column($column_weight, $total_column_weights, $offset, $resolution, $orientation)
 
 @mixin grid-column($size, $number_of_columns)
   width: percentage-column($size, $number_of_columns)
@@ -98,7 +155,7 @@
 @function is-core-column($key, $core_columns)
   @return map-get($core_columns, $key) != null
 
-@mixin extend-this-column($column_weight, $column_index, $core_columns, $resolution, $padding)
+@mixin extend-this-column($column_weight, $column_index, $core_columns, $resolution, $orientation, $padding)
   $total_weight: total-column-weights($core_columns) + (map-length($core_columns) - 1) * $padding/100
 
   $columns_before_this_column: get-columns-with-index-less-than($column_index, $core_columns)
@@ -106,7 +163,7 @@
 
   $width: percentage-column($column_weight, $total_weight)
   $left: percentage-column(total-column-weights($columns_before_this_column) + $num_columns_before_this_column * $padding/100, $total_weight)
-  @include extend($resolution,  $width, $left)
+  @include extend($resolution, $orientation, $width, $left)
 
 @function total-column-weights($column_map)
   $total_column_weights: 0
@@ -122,31 +179,44 @@
 
   @return $to_return
 
-@mixin extend($r: 767, $width: 100%, $left: 0)
-  @include w-lte($r)
+@mixin extend($r, $o, $width: 100%, $left: 0)
+  @include w-resolution-or-orientation($r, $o)
     width: $width
     left: $left
+
+@mixin w-resolution-or-orientation($r, $o)
+  @if is-not-null($r)
+    @include w-lte($r)
+      @content
+
+  @if is-not-null($o)
+    @include w-orientation($o)
+      @content
 
 @mixin w-lte($resolution)
   @media only screen and (max-width: #{$resolution}px)
     @content
 
-@mixin remove-this-column($column_weight, $total_grid_weight, $offset, $resolution)
+@mixin w-orientation($orientation)
+  @media only screen and (orientation: #{$orientation})
+    @content
+
+@mixin remove-this-column($column_weight, $total_grid_weight, $offset, $resolution, $orientation)
   @if $offset < $total_grid_weight / 2
     $distance: -100% - ($offset/$column_weight) * 100%
-    @include offscreen-left($distance, $resolution, percentage-column($column_weight, $total_grid_weight))
+    @include offscreen-left($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight))
   @else
     $distance: ($total_grid_weight - $offset)/$column_weight * 100%
-    @include offscreen-right($distance, $resolution)
+    @include offscreen-right($distance, $resolution, $orientation)
 
-@mixin offscreen-left($distance, $resolution, $column_width)
-  @include w-lte($resolution)
+@mixin offscreen-left($distance, $resolution, $orientation, $column_width)
+  @include w-resolution-or-orientation($resolution, $orientation)
     transform: translate3d($distance,0,0)
     .no-csstransforms3d &
       left: -#{$column_width}
 
-@mixin offscreen-right($distance, $resolution)
-  @include w-lte($resolution)
+@mixin offscreen-right($distance, $resolution, $orientation)
+  @include w-resolution-or-orientation($resolution, $orientation)
     transform: translate3d($distance,0 ,0)
     .no-csstransforms3d &
       left: 100%
