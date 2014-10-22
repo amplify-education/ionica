@@ -131,18 +131,22 @@
   @media only screen and (max-width: #{$resolution}px)
     @content
 
-@mixin remove-this-column($column_weight, $total_column_weights, $offset, $resolution)
-  @if $offset < $total_column_weights / 2
+@mixin remove-this-column($column_weight, $total_grid_weight, $offset, $resolution)
+  @if $offset < $total_grid_weight / 2
     $distance: -100% - ($offset/$column_weight) * 100%
-    @include offscreen-left($distance, $resolution)
+    @include offscreen-left($distance, $resolution, percentage-column($column_weight, $total_grid_weight))
   @else
-    $distance: ($total_column_weights - $offset)/$column_weight * 100%
+    $distance: ($total_grid_weight - $offset)/$column_weight * 100%
     @include offscreen-right($distance, $resolution)
 
-@mixin offscreen-left($distance, $resolution)
+@mixin offscreen-left($distance, $resolution, $column_width)
   @include w-lte($resolution)
     transform: translate3d($distance,0,0)
+    .no-csstransforms3d &
+      left: -#{$column_width}
 
 @mixin offscreen-right($distance, $resolution)
   @include w-lte($resolution)
     transform: translate3d($distance,0 ,0)
+    .no-csstransforms3d &
+      left: 100%
