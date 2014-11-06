@@ -241,14 +241,15 @@ $DEFAULT_RESOLUTION: 768
 @mixin shift-core-columns($grid, $shift_distance, $direction)
   $core_columns: map-get($grid, core_columns)
   $class_name: map-get($grid, class_name)
-  $total_weight: map-get($grid, total_core_column_weight)
+  $total_core_weight: map-get($grid, total_core_column_weight)
+  $total_weight: map-get($grid, total_grid_weight)
   $padding: map-get($grid, padding)
   @each $index, $weight in $core_columns
     $weight: map-get($weight, weight)
-    $this_column_in_percentages: ($weight / $total_weight) * 100%
+    $this_column_in_percentages: ($weight / $total_core_weight) * 100%
     $x_position: $this_column_in_percentages / ($this_column_in_percentages / $shift_distance)
     & ~ .#{$class_name}-#{$index}
       @if $direction == "right"
-        transform: translate3d($x_position + $padding, 0, 0)
+        transform: translate3d($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
       @if $direction == "left"
-        transform: translate3d(-$x_position - $padding, 0, 0)
+        transform: translate3d(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
