@@ -11,5 +11,5 @@ module.exports = (grunt) ->
 
     watch:
       css:
-        files: 'examples/**/*.sass'
+        files: ['ionica.sass', 'examples/**/*.sass']
         tasks: ['sass']
