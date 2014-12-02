@@ -86,7 +86,7 @@ nav {
         left: -31.25%; }
       nav.slide-in {
         transform: translate3d(0%, 0, 0); }
-        nav.slide-in ~ .amplify-ionica-grid-default-classname-2 {
+        nav.slide-in ~ main {
           transform: translate3d(34.375%, 0, 0); } }
 
 main {
@@ -118,7 +118,7 @@ aside {
         left: 100%; }
       aside.slide-in {
         transform: translate3d(1%, 0, 0); }
-        aside.slide-in ~ .amplify-ionica-grid-default-classname-2 {
+        aside.slide-in ~ main {
           transform: translate3d(-34.375%, 0, 0); } }
 
 /*# sourceMappingURL=example1.css.map */
