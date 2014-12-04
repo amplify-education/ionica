@@ -200,14 +200,14 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
 
 @mixin w-resolution-or-orientation($r, $o)
   @if is-not-null($r)
-    @include w-lte($r)
+    @include _ionica-w-lte($r)
       @content
 
   @if is-not-null($o)
     @include w-orientation($o)
       @content
 
-@mixin w-lte($resolution)
+@mixin _ionica-w-lte($resolution)
   @media only screen and (max-width: #{$resolution}px)
     @content
 
