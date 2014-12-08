@@ -1,0 +1,18 @@
+@function map-length($map)
+  @return length(map-keys($map))
+
+@function percentage-column($size, $number_of_columns)
+  @return to-percent($size * (100 / $number_of_columns))
+
+@function to-percent($number)
+  @return $number * 1%
+
+@function column-has-weight($column)
+  @return type-of($column) == number or (type-of($column) == list and type-of(nth($column, 1)) == number)
+
+@function column-has-width($column)
+  @return type-of($column) == string
+
+@function throw-invalid-weight-argument-error()
+  @error "First argument of a column has to be a list, number or a string"
+  @return 0

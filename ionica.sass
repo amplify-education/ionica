@@ -1,3 +1,5 @@
+@import 'utilities'
+
 $DEFAULT_RESOLUTION: 768
 $DEFAULT_IDENTIFIER: "amplify-ionica-grid-default-identifier"
 $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
@@ -7,15 +9,6 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   position: absolute
   height: 100%
   z-index: 1
-
-@function map-length($map)
-  @return length(map-keys($map))
-
-@function percentage-column($size, $number_of_columns)
-  @return to-percent($size * (100 / $number_of_columns))
-
-@function to-percent($number)
-  @return $number * 1%
 
 @mixin column($grid, $key)
   @include grid-column-styles(map-get($grid, transition_duration))
@@ -48,14 +41,18 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   @each $column_param in $list
 
     $column_weight: get-column-weight($column_param)
+    $column_width: get-column-width($column_param)
+
     $column_padding: $padding/100
     $column_identifier: get-column-identifier($column_param)
     @if $index == 1
       $column_padding: 0
-    $to_return: map-merge($to_return, ($index: (weight: $column_weight, offset: $offset + $column_padding, identifier: $column_identifier)))
 
     @if is-core-column-param($column_param) or $num_core_columns == 0
       $core_columns: map-merge($core_columns, ($index: (weight: $column_weight, identifier: $column_identifier)))
+    @else
+    $to_return: map-merge($to_return, ($index: (weight: $column_weight, width: $column_width, offset: $offset + $column_padding, identifier: $column_identifier)))
+
     $index: $index + 1
     $offset: $offset + $column_weight + $column_padding
 
@@ -134,11 +131,24 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   @return $num_core_columns
 
 @function get-column-weight($column_param)
+  @if column-has-width($column_param)
+    @return 0
+
   @if type-of($column_param) == list
     @return nth($column_param,1)
 
   @if type-of($column_param) == number
     @return $column_param
+
+  @error "Something Error Happened"
+
+@function get-column-width($column_param)
+  @if column-has-weight($column_param)
+    @return 0
+  @else if type-of($column_param) == string
+    @return $column_param
+
+  @error "Column width must be a string."
 
 @function get-column-identifier($column_param)
   @if type-of($column_param) == list
@@ -149,9 +159,6 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
 @function is-core-column-param($column_param)
   @if type-of($column_param) == list
     @return nth($column_param,2) == true
-  @return false
-  @if type-of($column_param) != number
-    @error "First parameter to grid has to be a list of numbers and/or lists"
   @return false
 
 @mixin grid-column-with-offset($column_weight, $total_column_weights, $offset, $index, $core_columns, $resolution, $orientation, $grid, $padding: 0)

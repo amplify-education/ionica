@@ -5,11 +5,13 @@ module.exports = (grunt) ->
   grunt.initConfig
 
     sass:
+      options:
+        debug: true
       dist:
         files:
           'examples/example1.css': 'examples/example1.sass'
 
     watch:
       css:
-        files: ['ionica.sass', 'examples/**/*.sass']
+        files: ['ionica.sass', 'utilities.sass', 'examples/**/*.sass']
         tasks: ['sass']
