@@ -1,3 +1,4 @@
+@import 'cast'
 @import 'utilities'
 
 $DEFAULT_RESOLUTION: 768
@@ -14,7 +15,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   @include grid-column-styles(map-get($grid, transition_duration))
   $c: map-get($grid, $key)
   $padding: map-get($grid, padding)
-  @include grid-column-with-offset(map-get($c, weight), map-get($grid, total_grid_weight), map-get($c, offset), $key, map-get($grid, core_columns), map-get($grid, resolution), map-get($grid, orientation), $grid, $padding)
+  @include grid-column-with-offset(map-get($c, weight), map-get($c, width), map-get($grid, total_grid_weight), map-get($grid, total_fixed_width), map-get($c, offset), map-get($c, width_offset), $key, map-get($grid, core_columns), map-get($grid, resolution), map-get($grid, orientation), $grid, $padding)
 
 @mixin generate-column-classes($grid, $class_name)
   $num_columns: map-get($grid, num_columns)
@@ -37,11 +38,15 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   $index: 1
   $offset: 0
   $to_return : map-merge($to_return, (class_name: $class_name, transition_duration: $transition_duration))
+  $total_fixed_width: 0
+  $width_offset: 0
 
   @each $column_param in $list
 
     $column_weight: get-column-weight($column_param)
     $column_width: get-column-width($column_param)
+    @if column-has-width($column_param)
+      $total_fixed_width: $total_fixed_width + number($column_width)
 
     $column_padding: $padding/100
     $column_identifier: get-column-identifier($column_param)
@@ -51,14 +56,16 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
     @if is-core-column-param($column_param) or $num_core_columns == 0
       $core_columns: map-merge($core_columns, ($index: (weight: $column_weight, identifier: $column_identifier)))
     @else
-    $to_return: map-merge($to_return, ($index: (weight: $column_weight, width: $column_width, offset: $offset + $column_padding, identifier: $column_identifier)))
+    $to_return: map-merge($to_return, ($index: (weight: $column_weight, width: $column_width, offset: $offset + $column_padding, width_offset: $width_offset, identifier: $column_identifier)))
 
     $index: $index + 1
     $offset: $offset + $column_weight + $column_padding
+    @if column-has-width($column_param)
+      $width_offset: $width_offset + number($column_width)
 
   $to_return: map-merge($to_return, (core_columns: $core_columns))
   $total_core_column_weight: total-column-weights($core_columns) + (map-length($core_columns) - 1) * $padding/100
-  $to_return: map-merge($to_return, (total_core_column_weight: $total_core_column_weight))
+  $to_return: map-merge($to_return, (total_core_column_weight: $total_core_column_weight, total_fixed_width: $total_fixed_width))
   @return $to_return
 
 @function parse-breakpoints($breakpoints)
@@ -161,17 +168,31 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
     @return nth($column_param,2) == true
   @return false
 
-@mixin grid-column-with-offset($column_weight, $total_column_weights, $offset, $index, $core_columns, $resolution, $orientation, $grid, $padding: 0)
-  @include grid-column($column_weight, $total_column_weights)
-  left: percentage-column($offset, $total_column_weights)
+@mixin grid-column-with-offset($column_weight, $column_width, $total_column_weights, $total_fixed_width, $offset, $width_offset, $index, $core_columns, $resolution, $orientation, $grid, $padding: 0)
+  @include grid-column($column_weight, $column_width, $total_column_weights, $total_fixed_width)
+  @if $offset == 0 and $width_offset == 0
+    left: 0
+  @else if $total_fixed_width == 0
+    left: percentage-column($offset, $total_column_weights)
+  @else
+    left: calc(#{$width_offset} + (100% - #{$total_fixed_width}) * #{decimal-column($offset, $total_column_weights)})
 
   @if is-core-column($index, $core_columns)
     @include extend-this-column($column_weight, $index, $core_columns, $resolution, $orientation, $padding)
   @else
-    @include remove-this-column($column_weight, $total_column_weights, $offset, $resolution, $orientation, $grid)
+    @if $column_width == 0
+      @include remove-this-dynamic-column($column_weight, $total_column_weights, $offset, $resolution, $orientation, $grid)
+    @else
+      @include remove-this-static-column($column_width, $resolution, $orientation, $index, $grid)
 
-@mixin grid-column($size, $number_of_columns)
-  width: percentage-column($size, $number_of_columns)
+@mixin grid-column($weight, $width, $number_of_columns, $total_fixed_width)
+  @if $width == 0
+    @if $total_fixed_width == 0
+      width: percentage-column($weight, $number_of_columns)
+    @else
+      width: calc((100% - #{$total_fixed_width}) * #{decimal-column($weight, $number_of_columns)})
+  @else
+    width: #{$width}
 
 @function is-core-column($key, $core_columns)
   @return map-get($core_columns, $key) != null
@@ -222,7 +243,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   @media only screen and (orientation: #{$orientation})
     @content
 
-@mixin remove-this-column($column_weight, $total_grid_weight, $offset, $resolution, $orientation, $grid)
+@mixin remove-this-dynamic-column($column_weight, $total_grid_weight, $offset, $resolution, $orientation, $grid)
   @if $offset < $total_grid_weight / 2
     $distance: -100% - ($offset/$column_weight) * 101%
     @include offscreen-left($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
@@ -230,7 +251,13 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
     $distance: ($total_grid_weight - $offset)/$column_weight * 101%
     @include offscreen-right($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
 
-@mixin offscreen-left($distance, $resolution, $orientation, $column_width, $grid)
+@mixin remove-this-static-column($column_width, $resolution, $orientation, $index, $grid)
+  @if $index == 1
+    @include offscreen-left(-100%, $resolution, $orientation, $column_width, $grid, true)
+  @else if is-last-column($index, $grid)
+    @include offscreen-right(100%, $resolution, $orientation, $column_width, $grid, true)
+
+@mixin offscreen-left($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
   @include w-resolution-or-orientation($resolution, $orientation)
     transform: translate3d($distance,0,0)
     z-index: 0
@@ -240,9 +267,9 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
     &.slide-in
       transform: translate3d(100% + $distance, 0 ,0)
 
-      @include shift-core-columns($grid, $column_width, "right")
+      @include shift-core-columns($grid, $column_width, "right", $is_static_column)
 
-@mixin offscreen-right($distance, $resolution, $orientation, $column_width, $grid)
+@mixin offscreen-right($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
   @include w-resolution-or-orientation($resolution, $orientation)
     transform: translate3d($distance,0 ,0)
     z-index: 0
@@ -252,23 +279,36 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
     &.slide-in
       transform: translate3d(-100% + $distance, 0, 0)
 
-      @include shift-core-columns($grid, $column_width, "left")
+      @include shift-core-columns($grid, $column_width, "left", $is_static_column)
 
-@mixin shift-core-columns($grid, $shift_distance, $direction)
+@mixin shift-core-columns($grid, $shift_distance, $direction, $is_static_column: false)
   $core_columns: map-get($grid, core_columns)
   $class_name: map-get($grid, class_name)
   $total_core_weight: map-get($grid, total_core_column_weight)
   $total_weight: map-get($grid, total_grid_weight)
   $padding: map-get($grid, padding)
+  $x_position: 0
   @each $index, $params in $core_columns
     $weight: map-get($params, weight)
     $identifier: map-get($params, identifier)
     @if $identifier == $DEFAULT_IDENTIFIER
       $identifier: ".#{$class_name}-#{$index}"
-    $this_column_in_percentages: ($weight / $total_core_weight) * 100%
-    $x_position: $this_column_in_percentages / ($this_column_in_percentages / $shift_distance)
+    @if $is_static_column
+      $x_position: $shift_distance
+    @else
+      $this_column_in_percentages: ($weight / $total_core_weight) * 100%
+      $x_position: $this_column_in_percentages / ($this_column_in_percentages / $shift_distance)
     & ~ #{$identifier}
-      @if $direction == "right"
-        transform: translate3d($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
-      @if $direction == "left"
-        transform: translate3d(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+      @if $is_static_column
+        $p: ($padding * ($total_core_weight / $total_weight) / $weight * 1%)
+        @if $direction == "right"
+          transform: translate3d(calc(#{$x_position} + #{$p}), 0, 0)
+        @if $direction == "left"
+          transform: translate3d(#{-$x_position}, 0, 0)
+
+      @else
+        @if $direction == "right"
+          transform: translate3d($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+        @if $direction == "left"
+          transform: translate3d(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+

@@ -4,6 +4,9 @@
 @function percentage-column($size, $number_of_columns)
   @return to-percent($size * (100 / $number_of_columns))
 
+@function decimal-column($size, $number_of_columns)
+  @return $size / $number_of_columns
+
 @function to-percent($number)
   @return $number * 1%
 
@@ -16,3 +19,6 @@
 @function throw-invalid-weight-argument-error()
   @error "First argument of a column has to be a list, number or a string"
   @return 0
+
+@function is-last-column($column_index, $grid)
+  @return $column_index == map-get($grid, num_columns)
