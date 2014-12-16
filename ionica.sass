@@ -265,7 +265,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
       left: -#{$column_width}
 
     &.slide-in
-      transform: translate3d(100% + $distance, 0 ,0)
+      transform: translate3d(100%, 0 ,0) translate3d($distance, 0 ,0)
 
       @include shift-core-columns($grid, $column_width, "right", $is_static_column)
 
@@ -277,7 +277,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
       left: 100%
 
     &.slide-in
-      transform: translate3d(-100% + $distance, 0, 0)
+      transform: translate3d(-100%, 0 ,0) translate3d($distance, 0 ,0)
 
       @include shift-core-columns($grid, $column_width, "left", $is_static_column)
 
@@ -302,7 +302,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
       @if $is_static_column
         $p: ($padding * ($total_core_weight / $total_weight) / $weight * 1%)
         @if $direction == "right"
-          transform: translate3d(calc(#{$x_position} + #{$p}), 0, 0)
+          transform: translate3d(#{$x_position}, 0, 0) translate3d(#{$p}, 0, 0)
         @if $direction == "left"
           transform: translate3d(#{-$x_position}, 0, 0)
 
