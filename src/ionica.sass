@@ -1,0 +1,311 @@
+$DEFAULT_RESOLUTION: 768
+$DEFAULT_IDENTIFIER: "amplify-ionica-grid-default-identifier"
+$DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
+
+@mixin grid-column-styles($transition_duration)
+  transition: transform, $transition_duration
+  position: absolute
+  height: 100%
+  z-index: 1
+
+@mixin column($grid, $key)
+  @include grid-column-styles(map-get($grid, transition_duration))
+  $c: map-get($grid, $key)
+  $padding: map-get($grid, padding)
+  @include grid-column-with-offset(map-get($c, weight), map-get($c, width), map-get($grid, total_grid_weight), map-get($grid, total_fixed_width), map-get($c, offset), map-get($c, width_offset), $key, map-get($grid, core_columns), map-get($grid, resolution), map-get($grid, orientation), $grid, $padding)
+
+@mixin generate-column-classes($grid, $class_name)
+  $num_columns: map-get($grid, num_columns)
+  $grid: map-merge($grid, (class_name: $class_name))
+  @for $i from 1 through $num_columns
+    .#{$class_name}-#{$i}
+      @include column($grid, $i)
+
+@function grid($list, $breakpoints: 767, $padding: 0, $transition_duration: 500ms, $class_name: $DEFAULT_CLASSNAME)
+  $breakpoints: parse-breakpoints($breakpoints)
+  $total_grid_weight: get-sum-of-column-weights($list)
+  $num_core_columns: get-num-core-columns($list)
+  $num_columns: length($list)
+  $core_columns: ()
+  $resolution: map-get($breakpoints, resolution)
+  $orientation: map-get($breakpoints, orientation)
+
+  $total_grid_weight: $total_grid_weight + (length($list) - 1) * $padding/100
+  $to_return: (total_grid_weight: $total_grid_weight, num_columns: $num_columns, resolution: $resolution, orientation: $orientation, padding: $padding)
+  $index: 1
+  $offset: 0
+  $to_return : map-merge($to_return, (class_name: $class_name, transition_duration: $transition_duration))
+  $total_fixed_width: 0
+  $width_offset: 0
+
+  @each $column_param in $list
+
+    $column_weight: get-column-weight($column_param)
+    $column_width: get-column-width($column_param)
+    @if column-has-width($column_param)
+      $total_fixed_width: $total_fixed_width + number($column_width)
+
+    $column_padding: $padding/100
+    $column_identifier: get-column-identifier($column_param)
+    @if $index == 1
+      $column_padding: 0
+
+    @if is-core-column-param($column_param) or $num_core_columns == 0
+      $core_columns: map-merge($core_columns, ($index: (weight: $column_weight, identifier: $column_identifier)))
+    @else
+    $to_return: map-merge($to_return, ($index: (weight: $column_weight, width: $column_width, offset: $offset + $column_padding, width_offset: $width_offset, identifier: $column_identifier)))
+
+    $index: $index + 1
+    $offset: $offset + $column_weight + $column_padding
+    @if column-has-width($column_param)
+      $width_offset: $width_offset + number($column_width)
+
+  $to_return: map-merge($to_return, (core_columns: $core_columns))
+  $total_core_column_weight: total-column-weights($core_columns) + (map-length($core_columns) - 1) * $padding/100
+  $to_return: map-merge($to_return, (total_core_column_weight: $total_core_column_weight, total_fixed_width: $total_fixed_width))
+  @return $to_return
+
+@function parse-breakpoints($breakpoints)
+  $to_return: ()
+  $breakpoints_resolution: null
+  $breakpoints_orientation: null
+
+  @if type-of($breakpoints) == map
+    $breakpoints_resolution: map-get($breakpoints, resolution)
+    $breakpoints_orientation: map-get($breakpoints, orientation)
+
+  @else
+    @if type-of($breakpoints) == number
+      $breakpoints_resolution: $breakpoints
+      $breakpoints_orientation: null
+
+    @else
+      $breakpoints: assert-type($breakpoints, string, "Expected a number or a string with value 'portrait' or 'landscape'. Got #{$breakpoints}.")
+      $breakpoints_orientation: $breakpoints
+      $breakpoints_resolution: null
+
+  @if is-not-null($breakpoints_resolution)
+    $breakpoints_resolution: assert-type($breakpoints_resolution, number, "Expected a number for resolution. Got #{type-of($breakpoints_resolution)}.")
+    @if $breakpoints_resolution < 0
+      @error "Expected resolution greater than 0. Got #{$breakpoints_resolution}."
+
+  @if is-not-null($breakpoints_orientation)
+    @if $breakpoints_orientation != "portrait" and $breakpoints_orientation != "landscape"
+      @error "Expected 'portrait' or 'landscape' as value of orientation. Got #{$breakpoints_orientation}."
+
+    @if $breakpoints_resolution == null and $breakpoints_orientation == null
+      $breakpoints_resolution: $DEFAULT_RESOLUTION
+
+  $to_return: map-merge($to_return, (resolution: $breakpoints_resolution))
+  $to_return: map-merge($to_return, (orientation: $breakpoints_orientation))
+
+  @return $to_return
+
+@function assert-not-null($value, $error_message)
+  @if is-null($value)
+    @error $error_message
+  @return $error_message
+
+@function is-null($value)
+  @return $value == null
+
+@function is-not-null($value)
+  @return not is-null($value)
+
+@function assert-type($value, $expected_type, $error_message)
+  @if type-of($value) != $expected_type
+    @error $error_message
+  @return $value
+
+@function get-sum-of-column-weights($list)
+  $total_weight: 0
+
+  @each $column_param in $list
+    $total_weight: $total_weight + get-column-weight($column_param)
+
+  @return $total_weight
+
+@function get-num-core-columns($list)
+  $num_core_columns: 0
+
+  @each $column_param in $list
+    @if is-core-column-param($column_param)
+      $num_core_columns: $num_core_columns + 1
+
+  @return $num_core_columns
+
+@function get-column-weight($column_param)
+  @if column-has-width($column_param)
+    @return 0
+
+  @if type-of($column_param) == list
+    @return nth($column_param,1)
+
+  @if type-of($column_param) == number
+    @return $column_param
+
+  @error "Something Error Happened"
+
+@function get-column-width($column_param)
+  @if column-has-weight($column_param)
+    @return 0
+  @else if type-of($column_param) == string
+    @return $column_param
+
+  @error "Column width must be a string."
+
+@function get-column-identifier($column_param)
+  @if type-of($column_param) == list
+    @if length($column_param) > 2 and type-of(nth($column_param, 3)) == string
+      @return nth($column_param, 3)
+  @return $DEFAULT_IDENTIFIER
+
+@function is-core-column-param($column_param)
+  @if type-of($column_param) == list
+    @return nth($column_param,2) == true
+  @return false
+
+@mixin grid-column-with-offset($column_weight, $column_width, $total_column_weights, $total_fixed_width, $offset, $width_offset, $index, $core_columns, $resolution, $orientation, $grid, $padding: 0)
+  @include grid-column($column_weight, $column_width, $total_column_weights, $total_fixed_width)
+  @if $offset == 0 and $width_offset == 0
+    left: 0
+  @else if $total_fixed_width == 0
+    left: percentage-column($offset, $total_column_weights)
+  @else
+    left: calc(#{$width_offset} + (100% - #{$total_fixed_width}) * #{decimal-column($offset, $total_column_weights)})
+
+  @if is-core-column($index, $core_columns)
+    @include extend-this-column($column_weight, $index, $core_columns, $resolution, $orientation, $padding)
+  @else
+    @if $column_width == 0
+      @include remove-this-dynamic-column($column_weight, $total_column_weights, $offset, $resolution, $orientation, $grid)
+    @else
+      @include remove-this-static-column($column_width, $resolution, $orientation, $index, $grid)
+
+@mixin grid-column($weight, $width, $number_of_columns, $total_fixed_width)
+  @if $width == 0
+    @if $total_fixed_width == 0
+      width: percentage-column($weight, $number_of_columns)
+    @else
+      width: calc((100% - #{$total_fixed_width}) * #{decimal-column($weight, $number_of_columns)})
+  @else
+    width: #{$width}
+
+@function is-core-column($key, $core_columns)
+  @return map-get($core_columns, $key) != null
+
+@mixin extend-this-column($column_weight, $column_index, $core_columns, $resolution, $orientation, $padding)
+  $total_weight: total-column-weights($core_columns) + (map-length($core_columns) - 1) * $padding/100
+
+  $columns_before_this_column: get-columns-with-index-less-than($column_index, $core_columns)
+  $num_columns_before_this_column: map-length($columns_before_this_column)
+
+  $width: percentage-column($column_weight, $total_weight)
+  $left: percentage-column(total-column-weights($columns_before_this_column) + $num_columns_before_this_column * $padding/100, $total_weight)
+  @include extend($resolution, $orientation, $width, $left)
+
+@function total-column-weights($column_map)
+  $total_column_weights: 0
+  @each $index, $value in $column_map
+    $total_column_weights: $total_column_weights + map-get($value, weight)
+  @return $total_column_weights
+
+@function get-columns-with-index-less-than($limit_index, $column_map)
+  $to_return : ()
+  @each $index, $value in $column_map
+    @if $index < $limit_index
+      $to_return: map-merge($to_return, ($index: $value))
+
+  @return $to_return
+
+@mixin extend($r, $o, $width: 100%, $left: 0)
+  @include w-resolution-or-orientation($r, $o)
+    width: $width
+    left: $left
+
+@mixin w-resolution-or-orientation($r, $o)
+  @if is-not-null($r)
+    @include _ionica-w-lte($r)
+      @content
+
+  @if is-not-null($o)
+    @include w-orientation($o)
+      @content
+
+@mixin _ionica-w-lte($resolution)
+  @media only screen and (max-width: #{$resolution}px)
+    @content
+
+@mixin w-orientation($orientation)
+  @media only screen and (orientation: #{$orientation})
+    @content
+
+@mixin remove-this-dynamic-column($column_weight, $total_grid_weight, $offset, $resolution, $orientation, $grid)
+  @if $offset < $total_grid_weight / 2
+    $distance: -100% - ($offset/$column_weight) * 101%
+    @include offscreen-left($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
+  @else
+    $distance: ($total_grid_weight - $offset)/$column_weight * 101%
+    @include offscreen-right($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
+
+@mixin remove-this-static-column($column_width, $resolution, $orientation, $index, $grid)
+  @if $index == 1
+    @include offscreen-left(-100%, $resolution, $orientation, $column_width, $grid, true)
+  @else if is-last-column($index, $grid)
+    @include offscreen-right(100%, $resolution, $orientation, $column_width, $grid, true)
+
+@mixin offscreen-left($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
+  @include w-resolution-or-orientation($resolution, $orientation)
+    transform: translate3d($distance,0,0)
+    z-index: 0
+    .no-csstransforms3d &
+      left: -#{$column_width}
+
+    &.slide-in
+      transform: translate3d(100%, 0 ,0) translate3d($distance, 0 ,0)
+
+      @include shift-core-columns($grid, $column_width, "right", $is_static_column)
+
+@mixin offscreen-right($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
+  @include w-resolution-or-orientation($resolution, $orientation)
+    transform: translate3d($distance,0 ,0)
+    z-index: 0
+    .no-csstransforms3d &
+      left: 100%
+
+    &.slide-in
+      transform: translate3d(-100%, 0 ,0) translate3d($distance, 0 ,0)
+
+      @include shift-core-columns($grid, $column_width, "left", $is_static_column)
+
+@mixin shift-core-columns($grid, $shift_distance, $direction, $is_static_column: false)
+  $core_columns: map-get($grid, core_columns)
+  $class_name: map-get($grid, class_name)
+  $total_core_weight: map-get($grid, total_core_column_weight)
+  $total_weight: map-get($grid, total_grid_weight)
+  $padding: map-get($grid, padding)
+  $x_position: 0
+  @each $index, $params in $core_columns
+    $weight: map-get($params, weight)
+    $identifier: map-get($params, identifier)
+    @if $identifier == $DEFAULT_IDENTIFIER
+      $identifier: ".#{$class_name}-#{$index}"
+    @if $is_static_column
+      $x_position: $shift_distance
+    @else
+      $this_column_in_percentages: ($weight / $total_core_weight) * 100%
+      $x_position: $this_column_in_percentages / ($this_column_in_percentages / $shift_distance)
+    & ~ #{$identifier}
+      @if $is_static_column
+        $p: ($padding * ($total_core_weight / $total_weight) / $weight * 1%)
+        @if $direction == "right"
+          transform: translate3d(#{$x_position}, 0, 0) translate3d(#{$p}, 0, 0)
+        @if $direction == "left"
+          transform: translate3d(#{-$x_position}, 0, 0)
+
+      @else
+        @if $direction == "right"
+          transform: translate3d($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+        @if $direction == "left"
+          transform: translate3d(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+

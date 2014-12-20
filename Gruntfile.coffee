@@ -11,7 +11,14 @@ module.exports = (grunt) ->
         files:
           'examples/example1.css': 'examples/example1.sass'
 
+    concat:
+      options:
+        banner: '// Ionica - Lightweight responsive grid'
+      dist:
+        src: ['src/cast.sass', 'src/utilities.sass', 'src/ionica.sass']
+        dest: 'dist/ionica.sass'
+
     watch:
       css:
-        files: ['ionica.sass', 'utilities.sass', 'examples/**/*.sass']
-        tasks: ['sass']
+        files: ['src/**/*.sass', 'examples/**/*.sass']
+        tasks: ['sass', 'concat']
