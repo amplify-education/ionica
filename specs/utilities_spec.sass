@@ -1,0 +1,56 @@
+@import "../dist/ionica"
+
++describe("Utilities")
+  +describe("map-length")
+    +it("Returns the length of a map")
+      $map: (a: 1, b: 2, c: 3)
+      +should(expect(map-length($map)), to(be(3)))
+
+  +describe("to-percent")
+    +it("Returns a number converted to a percentage string")
+      +should(expect(to-percent(50)), to(be(50%)))
+      +should(expect(to-percent(100)), to(be(100%)))
+      +should(expect(to-percent(10)), to(be(10%)))
+
+  +describe("percentage-column")
+    +it("Returns ratio of first argument to second argument in percentages")
+      +should(expect(percentage-column(5, 10)), to(be(50%)))
+      +should(expect(percentage-column(1, 10)), to(be(10%)))
+      +should(expect(percentage-column(3, 10)), to(be(30%)))
+
+  +describe("decimal-column")
+    +it("Returns the ratio of first argument to second argument")
+      +should(expect(decimal-column(5, 10)), to(be(0.5)))
+      +should(expect(decimal-column(1, 10)), to(be(0.1)))
+      +should(expect(decimal-column(3, 10)), to(be(0.3)))
+
+  +describe("column-has-weight")
+    +it("Returns a boolean that is true if a column has weight as opposed to width")
+      $core-column-weight: (5, true)
+      $core-column-width: ("100px", true)
+      +should(expect(column-has-weight(5)), to(be(true)))
+      +should(expect(column-has-weight(10)), to(be(true)))
+      +should(expect(column-has-weight($core-column-weight)), to(be(true)))
+
+      +should(expect(column-has-weight("200px")), to(be(false)))
+      +should(expect(column-has-weight("200%")), to(be(false)))
+      +should(expect(column-has-weight("200rem")), to(be(false)))
+      +should(expect(column-has-weight($core-column-width)), to(be(false)))
+
+  +describe("column-has-width")
+    +it("Returns a boolean that is true if column has width as opposed to weight")
+      $core-column-weight: (5, true)
+      +should(expect(column-has-width("200px")), to(be(true)))
+      +should(expect(column-has-width("200%")), to(be(true)))
+      +should(expect(column-has-width("200rem")), to(be(true)))
+
+      +should(expect(column-has-width(5)), to(be(false)))
+      +should(expect(column-has-width(10)), to(be(false)))
+      +should(expect(column-has-width($core-column-weight)), to(be(false)))
+
+  +describe("is-last-column")
+    +it("Returns a boolean that is true if a column index is the last column of the grid")
+      $grid: grid((1, (1, true), 1))
+      +should(expect(is-last-column(1, $grid)), to(be(false)))
+      +should(expect(is-last-column(2, $grid)), to(be(false)))
+      +should(expect(is-last-column(3, $grid)), to(be(true)))

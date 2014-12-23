@@ -1,8 +1,12 @@
 module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt)
+  grunt.loadNpmTasks('bootcamp')
 
   grunt.initConfig
+
+    clean:
+      build: ["./dist/*"]
 
     sass:
       options:
@@ -10,6 +14,12 @@ module.exports = (grunt) ->
       dist:
         files:
           'examples/example1.css': 'examples/example1.sass'
+          'test_results.css': 'test_runner.sass'
+
+    bootcamp:
+      test:
+        files:
+          src: ['./test_results.css']
 
     concat:
       options:
@@ -20,5 +30,7 @@ module.exports = (grunt) ->
 
     watch:
       css:
-        files: ['src/**/*.sass', 'examples/**/*.sass']
-        tasks: ['sass', 'concat']
+        files: ['./*.sass', 'src/**/*.sass', 'examples/**/*.sass', 'specs/**/*.sass']
+        tasks: ['build']
+
+  grunt.registerTask 'build', ['clean:build', 'concat', 'sass', 'bootcamp']
