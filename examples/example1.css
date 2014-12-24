@@ -1,9 +1,7 @@
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\000035}}
 .grid-fixed-width {
   height: 30%;
   position: relative;
   overflow: hidden; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\000039}}
   .grid-fixed-width .c1 {
     transition: transform, 500ms;
     position: absolute;
@@ -13,20 +11,15 @@
     left: 0;
     background-color: green; }
     @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\000039}}
       .grid-fixed-width .c1 {
         transform: translate3d(-100%, 0, 0);
         z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
         .no-csstransforms3d .grid-fixed-width .c1 {
           left: -250px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
         .grid-fixed-width .c1.slide-in {
           transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
           .grid-fixed-width .c1.slide-in ~ .c2 {
             transform: translate3d(250px, 0, 0) translate3d(4.54545%, 0, 0); } }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000312}}
   .grid-fixed-width .c2 {
     transition: transform, 500ms;
     position: absolute;
@@ -36,11 +29,9 @@
     left: calc(0_length(250, "px") + (100% - 0_length(250, "px")) * 0.04545);
     background-color: red; }
     @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000312}}
       .grid-fixed-width .c2 {
         width: 100%;
         left: 0%; } }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000315}}
   .grid-fixed-width .c3 {
     transition: transform, 500ms;
     position: absolute;
@@ -50,21 +41,16 @@
     left: calc(0_length(250, "px") + (100% - 0_length(250, "px")) * 0.54545);
     background-color: blue; }
     @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000315}}
       .grid-fixed-width .c3 {
         transform: translate3d(101%, 0, 0);
         z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003354}}
         .no-csstransforms3d .grid-fixed-width .c3 {
           left: 100%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003357}}
         .grid-fixed-width .c3.slide-in {
           transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
           .grid-fixed-width .c3.slide-in ~ .c2 {
             transform: translate3d(-50%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-1 {
   transition: transform, 500ms;
   position: absolute;
@@ -73,21 +59,16 @@
   width: 4.25532%;
   left: 0; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-1 {
       transform: translate3d(-100%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
       .no-csstransforms3d .grid-1-1 {
         left: -4.25532%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
       .grid-1-1.slide-in {
         transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         .grid-1-1.slide-in ~ .grid-1-2 {
           transform: translate3d(4.68085%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-2 {
   transition: transform, 500ms;
   position: absolute;
@@ -96,12 +77,10 @@
   width: 4.25532%;
   left: 4.68085%; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-2 {
       width: 100%;
       left: 0%; } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-3 {
   transition: transform, 500ms;
   position: absolute;
@@ -110,21 +89,16 @@
   width: 4.25532%;
   left: 9.3617%; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-3 {
       transform: translate3d(-322.2%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
       .no-csstransforms3d .grid-1-3 {
         left: -4.25532%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
       .grid-1-3.slide-in {
         transform: translate3d(100%, 0, 0) translate3d(-322.2%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         .grid-1-3.slide-in ~ .grid-1-2 {
           transform: translate3d(4.68085%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-4 {
   transition: transform, 500ms;
   position: absolute;
@@ -133,21 +107,16 @@
   width: 21.2766%;
   left: 14.04255%; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-4 {
       transform: translate3d(-166.66%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
       .no-csstransforms3d .grid-1-4 {
         left: -21.2766%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
       .grid-1-4.slide-in {
         transform: translate3d(100%, 0, 0) translate3d(-166.66%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         .grid-1-4.slide-in ~ .grid-1-2 {
           transform: translate3d(21.70213%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-5 {
   transition: transform, 500ms;
   position: absolute;
@@ -156,21 +125,16 @@
   width: 42.55319%;
   left: 35.74468%; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-5 {
       transform: translate3d(-184.84%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
       .no-csstransforms3d .grid-1-5 {
         left: -42.55319%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
       .grid-1-5.slide-in {
         transform: translate3d(100%, 0, 0) translate3d(-184.84%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         .grid-1-5.slide-in ~ .grid-1-2 {
           transform: translate3d(42.97872%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
 .grid-1-6 {
   transition: transform, 500ms;
   position: absolute;
@@ -179,63 +143,49 @@
   width: 21.2766%;
   left: 78.7234%; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003102}}
     .grid-1-6 {
       transform: translate3d(101%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003354}}
       .no-csstransforms3d .grid-1-6 {
         left: 100%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003357}}
       .grid-1-6.slide-in {
         transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         .grid-1-6.slide-in ~ .grid-1-2 {
           transform: translate3d(-21.70213%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000322}}
 html, body {
   height: 100%;
   margin: 0; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000326}}
 .grid-1 {
   height: 30%;
   position: relative;
   overflow: hidden; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000331}}
 .grid-1-1 {
   background-color: red; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000334}}
 .grid-1-2 {
   background-color: green; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000337}}
 .grid-1-3 {
   background-color: blue; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000340}}
 .grid-1-4 {
   background-color: pink; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000343}}
 .grid-1-5 {
   background-color: yellow; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000346}}
 .grid-1-6 {
   background-color: purple; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000351}}
 .grid-2 {
   height: 30%;
   margin-top: 10%;
   position: relative;
   overflow: hidden; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000357}}
 nav {
   transition: transform, 500ms;
   position: absolute;
@@ -245,21 +195,16 @@ nav {
   left: 0;
   background-color: magenta; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000357}}
     nav {
       transform: translate3d(-100%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003342}}
       .no-csstransforms3d nav {
         left: -31.25%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003345}}
       nav.slide-in {
         transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         nav.slide-in ~ main {
           transform: translate3d(34.375%, 0, 0); } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000361}}
 main {
   transition: transform, 500ms;
   position: absolute;
@@ -269,12 +214,10 @@ main {
   left: 34.375%;
   background-color: darkgreen; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000361}}
     main {
       width: 100%;
       left: 0%; } }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000365}}
 aside {
   transition: transform, 500ms;
   position: absolute;
@@ -284,17 +227,13 @@ aside {
   left: 68.75%;
   background-color: cyan; }
   @media only screen and (max-width: 1023px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/examples\/example1\.sass}line{font-family:\0000365}}
     aside {
       transform: translate3d(101%, 0, 0);
       z-index: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003354}}
       .no-csstransforms3d aside {
         left: 100%; }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003357}}
       aside.slide-in {
         transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/tpesut\/hack\/ionica\/dist\/ionica\.sass}line{font-family:\00003379}}
         aside.slide-in ~ main {
           transform: translate3d(-34.375%, 0, 0); } }
 

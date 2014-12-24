@@ -10,7 +10,7 @@ module.exports = (grunt) ->
 
     sass:
       options:
-        debug: true
+        debug: false
       dist:
         files:
           'examples/example1.css': 'examples/example1.sass'
