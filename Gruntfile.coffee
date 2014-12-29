@@ -25,7 +25,7 @@ module.exports = (grunt) ->
       options:
         banner: '// Ionica - Lightweight responsive grid'
       dist:
-        src: ['src/cast.sass', 'src/utilities.sass', 'src/ionica.sass']
+        src: ['src/cast.sass', 'src/utilities.sass', 'src/main.sass']
         dest: 'dist/ionica.sass'
 
     watch:
