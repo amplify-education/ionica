@@ -1,3 +1,4 @@
+// Ionica - Lightweight responsive grid
 @function _length($number, $unit)
   $strings: 'px' 'cm' 'mm' '%' 'ch' 'pica' 'in' 'em' 'rem' 'pt' 'pc' 'ex' 'vw' 'vh' 'vmin' 'vmax'
   $units:   1px  1cm  1mm  1%  1ch  1pica  1in  1em  1rem  1pt  1pc  1ex  1vw  1vh  1vmin  1vmax
@@ -54,9 +55,11 @@
       $result: $result + $number
 
   @return if($minus, $result * -1, $result)
-
 @function map-length($map)
   @return length(map-keys($map))
+
+@function to-percent($number)
+  @return $number * 1%
 
 @function percentage-column($size, $number_of_columns)
   @return to-percent($size * (100 / $number_of_columns))
@@ -64,25 +67,25 @@
 @function decimal-column($size, $number_of_columns)
   @return $size / $number_of_columns
 
-@function to-percent($number)
-  @return $number * 1%
-
 @function column-has-weight($column)
   @return type-of($column) == number or (type-of($column) == list and type-of(nth($column, 1)) == number)
 
 @function column-has-width($column)
   @return type-of($column) == string
 
+@function is-last-column($column_index, $grid)
+  @return $column_index == map-get($grid, num_columns)
+
 @function throw-invalid-weight-argument-error()
   @error "First argument of a column has to be a list, number or a string"
   @return 0
 
-@function is-last-column($column_index, $grid)
-  @return $column_index == map-get($grid, num_columns)
-
 $DEFAULT_RESOLUTION: 768
 $DEFAULT_IDENTIFIER: "amplify-ionica-grid-default-identifier"
 $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
+
+@function translate-position($x: 0, $y: 0, $z: 1px)
+  @return translate3d(#{$x}, #{$y}, #{$z})
 
 @mixin grid-column-styles($transition_duration)
   transition: transform, $transition_duration
@@ -338,25 +341,25 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
 
 @mixin offscreen-left($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
   @include w-resolution-or-orientation($resolution, $orientation)
-    transform: translate3d($distance,0,0)
+    transform: translate-position($distance)
     z-index: 0
     .no-csstransforms3d &
       left: -#{$column_width}
 
     &.slide-in
-      transform: translate3d(100%, 0 ,0) translate3d($distance, 0 ,0)
+      transform: translate-position(100%) translate-position($distance)
 
       @include shift-core-columns($grid, $column_width, "right", $is_static_column)
 
 @mixin offscreen-right($distance, $resolution, $orientation, $column_width, $grid, $is_static_column: false)
   @include w-resolution-or-orientation($resolution, $orientation)
-    transform: translate3d($distance,0 ,0)
+    transform: translate-position($distance)
     z-index: 0
     .no-csstransforms3d &
       left: 100%
 
     &.slide-in
-      transform: translate3d(-100%, 0 ,0) translate3d($distance, 0 ,0)
+      transform: translate-position(-100%) translate-position($distance)
 
       @include shift-core-columns($grid, $column_width, "left", $is_static_column)
 
@@ -381,13 +384,13 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
       @if $is_static_column
         $p: ($padding * ($total_core_weight / $total_weight) / $weight * 1%)
         @if $direction == "right"
-          transform: translate3d(#{$x_position}, 0, 0) translate3d(#{$p}, 0, 0)
+          transform: translate-position($x_position) translate-position($p)
         @if $direction == "left"
-          transform: translate3d(#{-$x_position}, 0, 0)
+          transform: translate-position($x_position)
 
       @else
         @if $direction == "right"
-          transform: translate3d($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+          transform: translate-position($x_position + ($padding * ($total_core_weight / $total_weight) / $weight * 1%))
         @if $direction == "left"
-          transform: translate3d(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%), 0, 0)
+          transform: translate-position(-$x_position - ($padding * ($total_core_weight / $total_weight) / $weight * 1%))
 

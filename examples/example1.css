@@ -12,14 +12,14 @@
     background-color: green; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c1 {
-        transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 1px);
         z-index: 0; }
         .no-csstransforms3d .grid-fixed-width .c1 {
           left: -250px; }
         .grid-fixed-width .c1.slide-in {
-          transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
+          transform: translate3d(100%, 0, 1px) translate3d(-100%, 0, 1px); }
           .grid-fixed-width .c1.slide-in ~ .c2 {
-            transform: translate3d(250px, 0, 0) translate3d(4.54545%, 0, 0); } }
+            transform: translate3d(250px, 0, 1px) translate3d(4.54545%, 0, 1px); } }
   .grid-fixed-width .c2 {
     transition: transform, 500ms;
     position: absolute;
@@ -42,14 +42,14 @@
     background-color: blue; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c3 {
-        transform: translate3d(101%, 0, 0);
+        transform: translate3d(101%, 0, 1px);
         z-index: 0; }
         .no-csstransforms3d .grid-fixed-width .c3 {
           left: 100%; }
         .grid-fixed-width .c3.slide-in {
-          transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
+          transform: translate3d(-100%, 0, 1px) translate3d(101%, 0, 1px); }
           .grid-fixed-width .c3.slide-in ~ .c2 {
-            transform: translate3d(-50%, 0, 0); } }
+            transform: translate3d(-50%, 0, 1px); } }
 
 .grid-1-1 {
   transition: transform, 500ms;
@@ -60,14 +60,14 @@
   left: 0; }
   @media only screen and (max-width: 1023px) {
     .grid-1-1 {
-      transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d .grid-1-1 {
         left: -4.25532%; }
       .grid-1-1.slide-in {
-        transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
+        transform: translate3d(100%, 0, 1px) translate3d(-100%, 0, 1px); }
         .grid-1-1.slide-in ~ .grid-1-2 {
-          transform: translate3d(4.68085%, 0, 0); } }
+          transform: translate3d(4.68085%, 0, 1px); } }
 
 .grid-1-2 {
   transition: transform, 500ms;
@@ -90,14 +90,14 @@
   left: 9.3617%; }
   @media only screen and (max-width: 1023px) {
     .grid-1-3 {
-      transform: translate3d(-322.2%, 0, 0);
+      transform: translate3d(-322.2%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d .grid-1-3 {
         left: -4.25532%; }
       .grid-1-3.slide-in {
-        transform: translate3d(100%, 0, 0) translate3d(-322.2%, 0, 0); }
+        transform: translate3d(100%, 0, 1px) translate3d(-322.2%, 0, 1px); }
         .grid-1-3.slide-in ~ .grid-1-2 {
-          transform: translate3d(4.68085%, 0, 0); } }
+          transform: translate3d(4.68085%, 0, 1px); } }
 
 .grid-1-4 {
   transition: transform, 500ms;
@@ -108,14 +108,14 @@
   left: 14.04255%; }
   @media only screen and (max-width: 1023px) {
     .grid-1-4 {
-      transform: translate3d(-166.66%, 0, 0);
+      transform: translate3d(-166.66%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d .grid-1-4 {
         left: -21.2766%; }
       .grid-1-4.slide-in {
-        transform: translate3d(100%, 0, 0) translate3d(-166.66%, 0, 0); }
+        transform: translate3d(100%, 0, 1px) translate3d(-166.66%, 0, 1px); }
         .grid-1-4.slide-in ~ .grid-1-2 {
-          transform: translate3d(21.70213%, 0, 0); } }
+          transform: translate3d(21.70213%, 0, 1px); } }
 
 .grid-1-5 {
   transition: transform, 500ms;
@@ -126,14 +126,14 @@
   left: 35.74468%; }
   @media only screen and (max-width: 1023px) {
     .grid-1-5 {
-      transform: translate3d(-184.84%, 0, 0);
+      transform: translate3d(-184.84%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d .grid-1-5 {
         left: -42.55319%; }
       .grid-1-5.slide-in {
-        transform: translate3d(100%, 0, 0) translate3d(-184.84%, 0, 0); }
+        transform: translate3d(100%, 0, 1px) translate3d(-184.84%, 0, 1px); }
         .grid-1-5.slide-in ~ .grid-1-2 {
-          transform: translate3d(42.97872%, 0, 0); } }
+          transform: translate3d(42.97872%, 0, 1px); } }
 
 .grid-1-6 {
   transition: transform, 500ms;
@@ -144,14 +144,14 @@
   left: 78.7234%; }
   @media only screen and (max-width: 1023px) {
     .grid-1-6 {
-      transform: translate3d(101%, 0, 0);
+      transform: translate3d(101%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d .grid-1-6 {
         left: 100%; }
       .grid-1-6.slide-in {
-        transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
+        transform: translate3d(-100%, 0, 1px) translate3d(101%, 0, 1px); }
         .grid-1-6.slide-in ~ .grid-1-2 {
-          transform: translate3d(-21.70213%, 0, 0); } }
+          transform: translate3d(-21.70213%, 0, 1px); } }
 
 html, body {
   height: 100%;
@@ -196,14 +196,14 @@ nav {
   background-color: magenta; }
   @media only screen and (max-width: 1023px) {
     nav {
-      transform: translate3d(-100%, 0, 0);
+      transform: translate3d(-100%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d nav {
         left: -31.25%; }
       nav.slide-in {
-        transform: translate3d(100%, 0, 0) translate3d(-100%, 0, 0); }
+        transform: translate3d(100%, 0, 1px) translate3d(-100%, 0, 1px); }
         nav.slide-in ~ main {
-          transform: translate3d(34.375%, 0, 0); } }
+          transform: translate3d(34.375%, 0, 1px); } }
 
 main {
   transition: transform, 500ms;
@@ -228,13 +228,13 @@ aside {
   background-color: cyan; }
   @media only screen and (max-width: 1023px) {
     aside {
-      transform: translate3d(101%, 0, 0);
+      transform: translate3d(101%, 0, 1px);
       z-index: 0; }
       .no-csstransforms3d aside {
         left: 100%; }
       aside.slide-in {
-        transform: translate3d(-100%, 0, 0) translate3d(101%, 0, 0); }
+        transform: translate3d(-100%, 0, 1px) translate3d(101%, 0, 1px); }
         aside.slide-in ~ main {
-          transform: translate3d(-34.375%, 0, 0); } }
+          transform: translate3d(-34.375%, 0, 1px); } }
 
 /*# sourceMappingURL=example1.css.map */
