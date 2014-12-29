@@ -25,8 +25,8 @@
     position: absolute;
     height: 100%;
     z-index: 1;
-    width: calc((100% - 0_length(250, "px")) * 0.45455);
-    left: calc(0_length(250, "px") + (100% - 0_length(250, "px")) * 0.04545);
+    width: calc((100% - 250px) * 0.45455);
+    left: calc(250px + (100% - 250px) * 0.04545);
     background-color: red; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c2 {
@@ -37,8 +37,8 @@
     position: absolute;
     height: 100%;
     z-index: 1;
-    width: calc((100% - 0_length(250, "px")) * 0.45455);
-    left: calc(0_length(250, "px") + (100% - 0_length(250, "px")) * 0.54545);
+    width: calc((100% - 250px) * 0.45455);
+    left: calc(250px + (100% - 250px) * 0.54545);
     background-color: blue; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c3 {

@@ -23,7 +23,7 @@ module.exports = (grunt) ->
 
     concat:
       options:
-        banner: '// Ionica - Lightweight responsive grid'
+        banner: '// Ionica - Lightweight responsive grid\n'
       dist:
         src: ['src/cast.sass', 'src/utilities.sass', 'src/main.sass']
         dest: 'dist/ionica.sass'
