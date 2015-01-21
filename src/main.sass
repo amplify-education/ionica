@@ -245,10 +245,10 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
 
 @mixin remove-this-dynamic-column($column_weight, $total_grid_weight, $offset, $resolution, $orientation, $grid)
   @if $offset < $total_grid_weight / 2
-    $distance: -100% - ($offset/$column_weight) * 101%
+    $distance: -100% - ($offset/guard-against-zero($column_weight)) * 101%
     @include offscreen-left($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
   @else
-    $distance: ($total_grid_weight - $offset)/$column_weight * 101%
+    $distance: ($total_grid_weight - $offset)/guard-against-zero($column_weight) * 101%
     @include offscreen-right($distance, $resolution, $orientation, percentage-column($column_weight, $total_grid_weight), $grid)
 
 @mixin remove-this-static-column($column_width, $resolution, $orientation, $index, $grid)

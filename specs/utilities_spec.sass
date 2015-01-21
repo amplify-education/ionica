@@ -54,3 +54,10 @@
       +should(expect(is-last-column(1, $grid)), to(be(false)))
       +should(expect(is-last-column(2, $grid)), to(be(false)))
       +should(expect(is-last-column(3, $grid)), to(be(true)))
+
+
+  +describe("guard-against-0")
+    +it("Returns a default value if the passed value is zero")
+      +should(expect(guard-against-zero(0)), to(be(1)))
+      +should(expect(guard-against-zero(0, 5)), to(be(5)))
+      +should(expect(guard-against-zero(1, 5)), to(be(1)))

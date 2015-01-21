@@ -22,3 +22,8 @@
 @function throw-invalid-weight-argument-error()
   @error "First argument of a column has to be a list, number or a string"
   @return 0
+
+@function guard-against-zero($value, $default: 1)
+  @if $value == 0
+    @return $default
+  @return $value
