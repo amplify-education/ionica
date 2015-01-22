@@ -6,7 +6,6 @@
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
-    z-index: 1;
     width: 250px;
     left: 0;
     background-color: green; }
@@ -24,7 +23,6 @@
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
-    z-index: 1;
     width: calc((100% - 250px) * 0.45455);
     left: calc(250px + (100% - 250px) * 0.04545);
     background-color: red; }
@@ -36,7 +34,6 @@
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
-    z-index: 1;
     width: calc((100% - 250px) * 0.45455);
     left: calc(250px + (100% - 250px) * 0.54545);
     background-color: blue; }
@@ -55,7 +52,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 4.25532%;
   left: 0; }
   @media only screen and (max-width: 1023px) {
@@ -73,7 +69,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 4.25532%;
   left: 4.68085%; }
   @media only screen and (max-width: 1023px) {
@@ -85,7 +80,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 4.25532%;
   left: 9.3617%; }
   @media only screen and (max-width: 1023px) {
@@ -103,7 +97,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 21.2766%;
   left: 14.04255%; }
   @media only screen and (max-width: 1023px) {
@@ -121,7 +114,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 42.55319%;
   left: 35.74468%; }
   @media only screen and (max-width: 1023px) {
@@ -139,7 +131,6 @@
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 21.2766%;
   left: 78.7234%; }
   @media only screen and (max-width: 1023px) {
@@ -190,7 +181,6 @@ nav {
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 31.25%;
   left: 0;
   background-color: magenta; }
@@ -209,7 +199,6 @@ main {
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 31.25%;
   left: 34.375%;
   background-color: darkgreen; }
@@ -222,7 +211,6 @@ aside {
   transition: transform, 500ms;
   position: absolute;
   height: 100%;
-  z-index: 1;
   width: 31.25%;
   left: 68.75%;
   background-color: cyan; }
