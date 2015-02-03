@@ -6,7 +6,7 @@
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
-    width: 250px;
+    width: calc((100% - 250px) * 0.45455);
     left: 0;
     background-color: green; }
     @media only screen and (max-width: 1023px) {
@@ -14,17 +14,17 @@
         transform: translate3d(-100%, 0, 1px);
         z-index: 0; }
         .no-csstransforms3d .grid-fixed-width .c1 {
-          left: -250px; }
+          left: -45.45455%; }
         .grid-fixed-width .c1.slide-in {
           transform: translate3d(100%, 0, 1px) translate3d(-100%, 0, 1px); }
           .grid-fixed-width .c1.slide-in ~ .c2 {
-            transform: translate3d(250px, 0, 1px) translate3d(4.54545%, 0, 1px); } }
+            transform: translate3d(50%, 0, 1px); } }
   .grid-fixed-width .c2 {
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
     width: calc((100% - 250px) * 0.45455);
-    left: calc(250px + (100% - 250px) * 0.04545);
+    left: calc(0px + (100% - 250px) * 0.5);
     background-color: red; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c2 {
@@ -34,19 +34,19 @@
     transition: transform, 500ms;
     position: absolute;
     height: 100%;
-    width: calc((100% - 250px) * 0.45455);
-    left: calc(250px + (100% - 250px) * 0.54545);
+    width: 250px;
+    left: calc(0px + (100% - 250px) * 1);
     background-color: blue; }
     @media only screen and (max-width: 1023px) {
       .grid-fixed-width .c3 {
-        transform: translate3d(101%, 0, 1px);
+        transform: translate3d(100%, 0, 1px);
         z-index: 0; }
         .no-csstransforms3d .grid-fixed-width .c3 {
           left: 100%; }
         .grid-fixed-width .c3.slide-in {
-          transform: translate3d(-100%, 0, 1px) translate3d(101%, 0, 1px); }
+          transform: translate3d(-100%, 0, 1px) translate3d(100%, 0, 1px); }
           .grid-fixed-width .c3.slide-in ~ .c2 {
-            transform: translate3d(-50%, 0, 1px); } }
+            transform: translate3d(250px, 0, 1px); } }
 
 .grid-1-1 {
   transition: transform, 500ms;
