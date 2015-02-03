@@ -261,7 +261,7 @@ $DEFAULT_CLASSNAME: "amplify-ionica-grid-default-classname"
   @else if $total_fixed_width == 0
     left: percentage-column($offset, $total_column_weights)
   @else
-    left: calc(#{$width_offset} + (100% - #{$total_fixed_width}) * #{decimal-column($offset, $total_column_weights)})
+    left: calc(#{guard-against-zero($width_offset, "0px")} + (100% - #{$total_fixed_width}) * #{decimal-column($offset, $total_column_weights)})
 
   @if is-core-column($index, $core_columns)
     @include extend-this-column($column_weight, $index, $core_columns, $resolution, $orientation, $padding)
